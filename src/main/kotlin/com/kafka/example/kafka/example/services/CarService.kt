@@ -1,6 +1,7 @@
 package com.kafka.example.kafka.example.resources
 
 import com.kafka.example.kafka.example.domains.Car
+import com.kafka.example.kafka.example.services.KafkaService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 
@@ -15,7 +16,7 @@ class CarService {
     private lateinit var carRepository: CarRepository
 
     @Autowired
-    private lateinit var kafkaTemplate: KafkaTemplate<String, String>
+    private lateinit var kafkaService: KafkaService
 
     fun findAll(): List<Car> = carRepository.findAll()
 
@@ -34,8 +35,10 @@ class CarService {
         it.id = null
         carRepository.save(it)
     }.also {
-        kafkaTemplate.send(topic, it.toString())
+        kafkaService.getMessage(it.toString())
+        kafkaService.run()
+        kafkaService.join()
+        println("Published message on Kafka and finished thread!")
     }
-
 
 }
