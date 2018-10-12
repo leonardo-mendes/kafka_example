@@ -6,7 +6,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - compose_realwave-iam
+      - config_test
 
   kafka:
     image: wurstmeister/kafka
@@ -19,10 +19,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - compose_realwave-iam
+      - config_test
 
 networks:
-  compose_realwave-iam:
+  config_test:
     driver: bridge
     ipam:
       driver: default
